@@ -676,11 +676,11 @@ class BootstrapTable extends Component {
       onFilterChange(filterObj, colInfos);
     }
 
-    this.setState({
-      currPage: this.props.options.pageStartIndex || Const.PAGE_START_INDEX
-    });
-
     if (this.isRemoteDataSource()) {
+      this.setState({
+        currPage: this.props.options.pageStartIndex || Const.PAGE_START_INDEX
+      });
+
       if (this.props.options.afterColumnFilter) {
         this.props.options.afterColumnFilter(filterObj, this.store.getDataIgnoringPagination());
       }
@@ -698,8 +698,17 @@ class BootstrapTable extends Component {
     let result;
 
     if (this.props.pagination) {
-      const { sizePerPage } = this.state;
-      result = this.store.page(1, sizePerPage).get();
+      var currPage    = this.state.currPage,
+          sizePerPage = this.state.sizePerPage,
+          dataLength  = this.store.getDataIgnoringPagination().length,
+          maxPage     = Math.ceil(dataLength / sizePerPage);
+
+      if (currPage > maxPage) {
+        currPage = 1;
+        this.setState({currPage: currPage});
+      }
+
+      result = this.store.page(currPage, sizePerPage).get();
     } else {
       result = this.store.get();
     }

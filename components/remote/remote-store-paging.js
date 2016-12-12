@@ -23,7 +23,7 @@ export default class RemoteStorePaging extends React.Component {
       data: this.products.slice(0, this.props.sizePerPage),
       totalDataSize: this.products.length,
       sizePerPage: this.props.sizePerPage,
-      currentPage: 1
+      currentPage: this.props.currentPage
     };
   }
 
